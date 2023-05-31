@@ -1,0 +1,134 @@
+html,
+
+* {
+  font-family: 'Jetbrains Mono', monospace;
+}
+
+
+body {
+	background-color: #616161 !important;
+}
+
+body * {
+	color: #000000 !important;
+}
+
+a,
+a * {
+}
+.note.Public {   background-color: #ad6f27 !important; }
+.note.Private {   background-color: #4f7652 !important; }
+
+.gridcolor-chg {   background-color: #ad6f27 !important; }
+
+.gridcolor-bupsys {
+	background-color: #0c4221 !important;
+}
+
+.gridcolor-evt {
+}
+
+.gridcolor-new {   font-weight: 700; }
+
+
+div.
+row {
+
+}
+
+
+a:hover,
+a:hover *,
+a:visited:hover,
+a:visited:hover *,
+span[onclick]:hover,
+div[onclick]:hover,
+[role="link"]:hover,
+[role="link"]:hover *,
+[role="button"]:hover *,
+[role="menuitem"]:hover,
+[role="menuitem"]:hover *,
+.link:hover,
+.link:hover * {
+	color: #ee3232 !important;
+	background-color: #4F4F4F !important;
+}
+
+a:visited,
+a:visited * {
+	color: #000000 !important;
+}
+
+legend {
+	color: rgba(9, 246, 68, 1) !important;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+[id*="headline"],
+[class*="headline"],
+[id*="header"],
+[class*="header"],
+[class*="header"] td {
+	color: rgba(255, 184, 108, 1) !important;
+}
+
+table {
+	background-color: #616161 !important;
+}
+
+[id*="overlay"],
+[id*="lightbox"],
+blockquote {
+	background-color: rgba(68, 71, 90, 1) !important;
+}
+
+pre,
+dl {
+	background-color: #616161 !important;
+}
+
+input,
+select,
+button,
+[role="button"],
+a.button,
+a.submit,
+a.BigButton,
+a.TabLink,
+.install[onclick] {
+	background: #616161 !important;
+}
+
+textarea {
+	background: #616161 !important;
+}
+
+div,
+ul,
+button,
+.style-scope yt-icon-button{
+}
+li {
+	background-color: #616161 !important;
+
+}
+
+
+
+
+
+a.highlight,
+a.highlight *,
+a.active,
+a.active *,
+.selected,
+.selected *,
+[href="#"] {
+	font-weight: bold !important;
+}
+
