@@ -1,0 +1,1 @@
+openssl req -sha256 -newkey rsa:4096 -subj "/CN=derpalm/" -keyout "$HOME/.cert/adca-derpalm.key" -out "$HOME/adca-derpalm.csr" -nodes && chmod 0600 "$HOME/.cert/adca-derpalm.key"
