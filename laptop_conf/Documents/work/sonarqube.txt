@@ -1,0 +1,105 @@
+Suppress ind-pc-rh8-sonarqube-server.ind1.sth.basefarm.net
+        ind-pc-rh8-sonarqube-psql1.ind1.sth.basefarm.net                                                                                                      
+
+
+Check which version of OpenJDK that is required for the latest Sonarqube release:
+https://docs.sonarqube.org/latest/requirements/prerequisites-and-overview/
+
+Check which version that's currently installed:
+[PROD] root@ind-pc-rh8-sonarqube-server1 ~ # java -version
+openjdk version "11.0.17" 2022-10-18 LTS
+
+If these don't match, we have to install the required version of OpenJDK.
+For example if OpenJDK-17 is required, and OpenJDK-11 is currently installed:
+[PROD] root@ind-pc-rh8-sonarqube-server1 ~ # yum remove java-11-openjdk.x86_64
+[PROD] root@ind-pc-rh8-sonarqube-server1 ~ # yum install java-17-openjdk.x86_64
+
+
+Download and unpack the latest Sonarqube Community Edition from their website:
+https://www.sonarsource.com/products/sonarqube/downloads/
+[PROD] root@ind-pc-rh8-sonarqube-server1 ~ # cd /opt/
+[PROD] root@ind-pc-rh8-sonarqube-server1 opt # wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-<version>.zip
+[PROD] root@ind-pc-rh8-sonarqube-server1 opt # unzip sonarqube-<version>.zip
+[PROD] root@ind-pc-rh8-sonarqube-server1 opt # mv sonarqube-<version> sonar-<version>
+
+Stop the Sonarqube service:
+[PROD] root@ind-pc-rh8-sonarqube-server1 opt # systemctl stop sonarqube.service
+
+
+Compare /opt/sonar/conf/sonar.properties file with the one you just unpacked.
+Open up the new sonar.properties with vim, and append the the following lines from the old config:
+
+# User Credentials.
+sonar.jdbc.username=sonar                                                                                                                                      │lasticSearch] tryToMoveTo Web Server from INIT to STARTING => true
+sonar.jdbc.password=Supersonar666!
+<LeftMouse>sonar.jdbc.url=jdbc:postgresql://ind-pc-rh8-sonarqube-psql1.ind1.sth.basefarm.net/sonar
+
+
+# LDAP CONFIGURATION
+sonar.security.realm=LDAP
+ldap.url=ldaps://ldap.sth.basefarm.net:636
+ldap.bindDn=uid=ind-sonar,ou=People,o=basefarm.com,cn=DAM
+ldap.bindPassword=dYmU5x523t
+ldap.user.baseDn=cn=DAM
+ldap.user.request=(&(objectClass=inetOrgPerson)(|(owner=o=Inera Drift,ou=Customers,o=basefarm.com,cn=DAM)(uid=clfstedt)(uid=eahlstrm)(uid=pekocsis)(&(owner=o=B│drwxr-xr-x. 2 ind-sonar root    86 Feb 23 11:02 conf
+asefarm AS,ou=Customers,o=basefarm.no,cn=DAM)(departmentNumber=82480)))(uid={0}))
+ldap.user.realNameAttribute=cn
+ldap.user.emailAttribute=mailRoutinAddress
+ldap.group.idAttribute=cn
+
+
+[PROD] root@ind-pc-rh8-sonarqube-server1 opt # cp sonar/config/sonar.properties sonarqube-<version>/conf/
+Remove the existing sym-link that points to the "old" sonarqube version:
+[PROD] root@ind-pc-rh8-sonarqube-server1 opt # rm sonar
+Create sym-link towards new version:
+[PROD] root@ind-pc-rh8-sonarqube-server1 opt # ln -s sonar-<version> sonar
+[PROD] root@ind-pc-rh8-sonarqube-server1 opt # chown -R ind-sonar sonar/*
+
+Edit the Sonarqube versionnumber for the sonarqube-service:
+[PROD] root@ind-pc-rh8-sonarqube-server1 opt # vim /etc/systemd/system/sonarqube.service
+On line 10, replace sonar-application-X.X.X.XXXX.jar with the latest versionnumber:
+ExecStart=/bin/nohup /usr/bin/java -Xms32m -Xmx32m -Djava.net.preferIPv4Stack=true -jar /opt/sonar/lib/sonar-application-8.9.8.54436.jar
+
+[PROD] root@ind-pc-rh8-sonarqube-server1 opt # systemctl start sonarqube.service
+
+
+On ind-pc-rh8-sonarqube-psql1.ind1.sth.basefarm.net:
+Shutdown
+Take snapshot
+Start server back up.
+On winbast, go to https://sonarqube.drift.inera.se/setup and click on "Upgrade".
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+cd /opt/
+Säkerhetskopiera gamla installationen
+cp -R sonar sonar-backup-ticketnr
+Packa upp nya i typ sonar-9.9.0
+jämför sonar.properties i conf-mappen
+Tror att vi kan slänga in den rakt av i nya mappen
+Stäng ner sonarqube
+Fimpa sonar-mappen
+symlinka sonar till sonar-9.9.0
+Editera /etc/systemd/system/sonarqube.service
+byt till nytt versionsnr
+ExecStart=/bin/nohup /usr/bin/java -Xms32m -Xmx32m -Djava.net.preferIPv4Stack=true -jar /opt/sonar/lib/sonar-application-8.9.8.54436.jar
+Starta servicen
+15:49
+Eller istället så kan vi kopiera gamla installationen så att den också får ett versionsnr
+15:49
+Istället för backup
+15:50
+Så sparar vi gamla versioner och kan hoppa tillbaka om skit träffar fläkten

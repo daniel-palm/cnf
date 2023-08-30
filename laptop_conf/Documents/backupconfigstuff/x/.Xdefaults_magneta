@@ -1,0 +1,94 @@
+! special
+*background: #1C1C1C
+*foreground: #977381
+*cursorColor: #977381
+
+!! black dark/light
+*color0: #412731
+*color8: #73505D
+
+!! red dark/light
+*color1: #AF798E
+*color9: #AF798E
+
+!! green dark/light
+*color2: #A57286
+*color10: #A57286
+
+!! yellow dark/light
+*color3: #97697B
+*color11: #97697B
+
+!! blue dark/light
+*color4: #8C5F70
+*color12: #8C5F70
+
+!! magenta dark/light
+*color5: #825969
+*color13: #977381
+
+!! cyan dark/light
+*color6: #6B3E4F
+*color14: #6B3E4F
+
+!! white dark/light
+*color7: #926778
+color15: #C390A3
+
+URxvt.intensityStyles:	false
+!*URxvt.background:       [100]#000000
+URxvt.depth:		32
+#monospace old font
+URxvt.font: 		xft:Hack:style=Regular:size=8
+URxvt.scrollBar:	false
+URxvt.cursorColor:	white
+
+
+b
+a
+
+
+!! #path for extensions: /usr/lib/x86_64-linux-gnu/urxvt/perl
+!! Extensions
+URxvt.perl-ext-common:	default,matcher,resize-font,url-select,keyboard-select,clippy,selection-to-clipboard
+URxvt.colorUL:		#4682B4
+!! url-select
+URxvt.keysym.M-u:	perl:url-select:select_next
+URxvt.url-select.launcher: linkhandler
+URxvt.url-select.underline: true
+!! keyboard-select:
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+!! resize-font
+URxvt.resize-font.smaller:	C-Down
+URxvt.resize-font.bigger:	C-Up
+!! Matcher
+URxvt.url-launcher:	linkhandler
+URxvt.matcher.button:	1
+
+
+
+Xft.antialias: true
+! General
+urxvt*termName: rxvt-unicode-256color
+urxvt*loginShell:         true
+urxvt*scrollBar:         false
+urxvt*secondaryScroll:    true
+urxvt*saveLines:         65535
+urxvt*cursorBlink:        true
+urxvt*urgentOnBell:       true
+!urxvt*override-redirect:false
+urxvt*borderLess:                       false 
+!urxvt*internalBorder:       0
+!urxvt*externalBorder:       0
+
+URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
+URxvt.iso14755: False
+URxvt*mouseWheelScrollPage: true
+
+urxvt*url-launcher: firefox
+urxvt*matcher.button: 1
+
+
+

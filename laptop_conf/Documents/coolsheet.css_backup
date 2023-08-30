@@ -1,0 +1,140 @@
+html,
+
+* {
+  font-family: 'Jetbrains Mono', monospace;
+}
+
+
+body {
+	background-color: #1B1B1B !important;
+}
+
+body * {
+	color: #FFFFFF !important;
+}
+
+a,
+a * {
+	color: rgba(9, 246, 68, 1) !important;
+}
+.note.Public {   background-color: #ad6f27 !important; }
+.note.Private {   background-color: #4f7652 !important; }
+
+.gridcolor-chg {   background-color: #ad6f27 !important; }
+
+.gridcolor-evt {
+  background-color: #1B1B1B !important;
+}
+
+.gridcolor-new {   font-weight: 700; }
+
+
+div.
+row {
+
+}
+
+
+a:hover,
+a:hover *,
+a:visited:hover,
+a:visited:hover *,
+span[onclick]:hover,
+div[onclick]:hover,
+[role="link"]:hover,
+[role="link"]:hover *,
+[role="button"]:hover *,
+[role="menuitem"]:hover,
+[role="menuitem"]:hover *,
+.link:hover,
+.link:hover * {
+	color: rgba(212, 0, 13, 1) !important;
+	background-color: #4F4F4F !important;
+}
+
+a:visited,
+a:visited * {
+	color: rgba(9, 246, 68, 1) !important;
+}
+
+legend {
+	color: rgba(9, 246, 68, 1) !important;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+[id*="headline"],
+[class*="headline"],
+[id*="header"],
+[class*="header"],
+[class*="header"] td {
+	color: rgba(255, 184, 108, 1) !important;
+}
+
+table {
+	background-color: #1B1B1B !important;
+}
+
+[id*="overlay"],
+[id*="lightbox"],
+blockquote {
+	background-color: rgba(68, 71, 90, 1) !important;
+}
+
+pre,
+dl {
+	background-color: #1B1B1B !important;
+}
+
+input,
+select,
+button,
+[role="button"],
+a.button,
+a.submit,
+a.BigButton,
+a.TabLink,
+.install[onclick] {
+	text-indent: 5px;
+	appearance: none !important;
+	-moz-appearance: none !important;
+	-webkit-appearance: none !important;
+	background: #1B1B1B !important;
+}
+
+textarea {
+	appearance: none !important;
+	-moz-appearance: none !important;
+	-webkit-appearance: none !important;
+	background: #1B1B1B !important;
+}
+
+div,
+ul,
+button,
+.style-scope yt-icon-button{
+}
+li {
+	background-color: #1B1B1B !important;
+
+}
+
+
+
+
+
+a.highlight,
+a.highlight *,
+a.active,
+a.active *,
+.selected,
+.selected *,
+[href="#"] {
+	font-weight: bold !important;
+	color: rgba(9, 246, 68, 1) !important;
+}
+

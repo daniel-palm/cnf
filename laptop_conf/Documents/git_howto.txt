@@ -1,0 +1,53 @@
+  ▄████  ██▓▄▄▄█████▓
+ ██▒ ▀█▒▓██▒▓  ██▒ ▓▒
+▒██░▄▄▄░▒██▒▒ ▓██░ ▒░
+░▓█  ██▓░██░░ ▓██▓ ░ 
+░▒▓███▀▒░██░  ▒██▒ ░ 
+ ░▒   ▒ ░▓    ▒ ░░   
+  ░   ░  ▒ ░    ░    
+░ ░   ░  ▒ ░  ░      
+      ░  ░           
+
+#github page:
+https://github.com/daniel-palm/cnf/
+
+#git branches:
+main
+home
+laptop
+
+git pw
+#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
+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
+
+#usual procedure
+cd ~/.config/cnf
+git init
+git pull
+<add/remove files>
+git add/rm <files>
+git commit -m "some message"
+git push -u origin <branch>
+
+##################################################################
+
+#How to Switch Branches in Git
+#switching branches is also referred to as "checking out" branches
+git switch <other-branch>
+
+
+#push to a branch
+git push -u origin <local-branch>
+
+
+#How to Merge Branches in Git
+# (1) Check out the branch that should receive the changes
+git switch main
+
+# (2) Execute the "merge" command with the name of the branch that contains the desired changes
+git merge feature/contact-form
+
+
+#rename branch
+git branch -m <old-name> <new-name>
+git push -u origin <new-name>

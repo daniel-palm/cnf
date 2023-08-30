@@ -1,0 +1,34 @@
+
+#Network conf
+https://int.basefarm.com/display/systems/Office+network+client+configuration
+
+
+#VPN Setup
+https://int.basefarm.com/x/TglhFg
+
+
+#printer
+https://int.basefarm.com/display/basefarm/Ricoh+print+system
+
+
+
+
+
+
+
+
+
+Network connections:
+/etc/NetworkManager/system-connections
+
+
+
+
+wifi from cmd:
+nmtui
+
+vpn cmd:
+sudo openconnect -u --background -c ~/.cert/adca-derpalm.crt -k ~/.cert/adca-derpalm.key bastion-vpn.osl.basefarm.net 
+
+vpn disconnect cmd:
+sudo killall -SIGINT openconnect

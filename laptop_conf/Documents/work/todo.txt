@@ -1,0 +1,29 @@
+#Set up two VMs running Ubuntu server.
+
+#set up a kubernetes cluster
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
+
+#set up a minecraft server using docker
+https://github.com/solarhess/kubernetes-minecraft-server
+
+#minecraft server image
+https://hub.docker.com/r/itzg/minecraft-server/
+
+
+
+
+
+
+
+
+#nginx website with mysql and php
+https://chat.openai.com/chat
+configure nginx to display mysql database using php
+PHP code to connect mysql database to nginx webserver
+
+#OR
+I want to set up a nginx website displaying a C application
+
+
+
+

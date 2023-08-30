@@ -1,0 +1,2 @@
+#Using "SSH Server"
+ssh -oHostKeyAlgorithms=+ssh-rsa derp@<ip>

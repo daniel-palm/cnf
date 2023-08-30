@@ -1,0 +1,19 @@
+https://www.techrepublic.com/article/how-to-deploy-nginx-on-a-kubernetes-cluster/
+
+https://scriptcrunch.com/change-nginx-index-configmap/
+
+
+
+https://www.youtube.com/watch?v=u948CURLDJA
+
+
+
+
+
+
+
+1 dockerize application
+2 deploy on kubernetes
+
+
+https://www.youtube.com/watch?v=7YjB6s6LdIo

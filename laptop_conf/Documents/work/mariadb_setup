@@ -1,0 +1,76 @@
+#######
+server1
+#######
+
+#run script and remove flags as needed.
+/opt/DAM/sbin/mariadb_post_setup.sh -r -t -b
+#finally, run with -p
+/opt/DAM/sbin/mariadb_post_setup.sh -p
+#Copy the output, and execute it on server2, example below:
+
+#######
+server2
+#######
+
+/opt/DAM/sbin/mariadb_post_setup.sh -r WAhU6gq6klCUI0QEGVYxY5FK -b +QScHPkWI5DneYQ2JjnzMogj -t wW+YOwq0wSC/xkaSpJ/7pSl9
+
+#Manual setup of key-based login between cluster nodes:
+#On both servers create ssh-keys for root, but only if they don't already exist
+
+[ ! -f /root/.ssh/id_ed25519.pub ] && ssh-keygen -t ed25519
+#Then copy the one created on the one server
+cat /root/.ssh/id_ed25519.pub
+#and append it to the authorized_keys on the other:
+echo "<pub_key here>" >> /root/.ssh/authorized_keys
+
+#######
+server1
+#######
+
+mariadb $(grep -v ^# /db/disk4/mariadb/mariadb.auth) 
+CREATE USER 'repl'@'ind-%' IDENTIFIED by 'supersecretpassword';
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'ind-%';
+
+#Show binlog and it's position within mariadb
+SHOW MASTER STATUS;
+
+#######
+server2
+#######
+
+mariadb $(grep -v ^# /db/disk4/mariadb/mariadb.auth) 
+CREATE USER 'repl'@'ind-%' IDENTIFIED by 'supersecretpassword';
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'ind-%';
+CHANGE MASTER TO
+MASTER_HOST='<server1>',
+MASTER_USER='repl',
+MASTER_PASSWORD='supersecretpassword',
+MASTER_PORT=3306,
+MASTER_LOG_FILE='<see 'File' output on server1>',
+MASTER_LOG_POS=<see 'Position' output on server1>;
+START REPLICA;
+SHOW MASTER STATUS;
+
+#Now do the same on server1
+
+#######
+server1
+#######
+
+CHANGE MASTER TO
+    -> MASTER_HOST='<server2>',
+    -> MASTER_USER='repl',                                                                                              
+    -> MASTER_PASSWORD='supersecretpassword',
+    -> MASTER_PORT=3306,
+    -> MASTER_LOG_FILE='<see 'File' output on server2>',                                                         
+    -> MASTER_LOG_POS=<see 'Position' output on server2>;
+START REPLICA;
+
+#Now run the vip_admin script, if everything went well you should see "MARIADB" as running
+#and SECONDS_BEHIND_MASTER at 0.
+/opt/DAM/sbin/mariadb_vip_admin.sh status
+/opt/DAM/sbin/mariadb_vip_admin.sh up
+/opt/DAM/sbin/mariadb_vip_admin.sh status
+#you should now see server1 as Primary, and server2 as Standby.
+
+DONE!

@@ -1,0 +1,4 @@
+nmcli radio wifi off
+nmcli radio wifi on
+dhclient enp0s31f6
+

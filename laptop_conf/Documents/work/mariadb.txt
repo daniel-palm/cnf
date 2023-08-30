@@ -1,0 +1,107 @@
+
+
+#####################
+ind-ssob-rh8-mariadb1:
+#####################
+
+[root@ind-ssob-rh8-mariadb1 mariadb]# mariadb $(grep -v ^# /db/disk4/mariadb/mariadb.auth) 
+MariaDB [(none)]> CREATE USER 'repl'@'ind-%' IDENTIFIED by 'supersecretpassword';
+Query OK, 0 rows affected (0.002 sec)
+MariaDB [(none)]> GRANT REPLICATION SLAVE ON *.* TO 'repl'@'ind-%';
+Query OK, 0 rows affected (0.002 sec)   
+
+MariaDB [(none)]> GRANT REPLICATION SLAVE ON *.* TO 'repl'@'ind-%';                                                     
+Query OK, 0 rows affected (0.002 sec)                                                                                   
+
+MariaDB [(none)]> SHOW MASTER STATUS;                                                                                   
++---------------+----------+--------------+------------------+                                                          
+| File          | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++---------------+----------+--------------+------------------+
+| binlog.000015 |      715 |              |                  |
++---------------+----------+--------------+------------------+
+1 row in set (0.001 sec)
+
+
+#####################
+ind-ssob-rh8-mariadb2:
+#####################
+
+MariaDB [(none)]> CREATE USER 'repl'@'ind-%' IDENTIFIED by 'supersecretpassword';                                       
+Query OK, 0 rows affected (0.002 sec)                                                                                   
+
+MariaDB [(none)]> GRANT REPLICATION SLAVE ON *.* TO 'repl'@'ind-%';                                                     
+Query OK, 0 rows affected (0.002 sec) 
+
+
+MariaDB [(none)]> CHANGE MASTER TO                                                                                      
+    -> MASTER_HOST='ind-ssob-rh8-mariadb1.ind2.sth.basefarm.net',                                                       
+    -> MASTER_USER='repl',                                                                                              
+    -> MASTER_PASSWORD='supersecretpassword',                                                                           
+    -> MASTER_PORT=3306,                                                                                                
+    -> MASTER_LOG_FILE='binlog.000015',                                                                                 
+    -> MASTER_LOG_POS=715;                                                                                              
+Query OK, 0 rows affected (0.008 sec) 
+MariaDB [(none)]> START REPLICA;                                                                                        
+Query OK, 0 rows affected (0.002 sec)   
+
+MariaDB [(none)]> SHOW MASTER STATUS;                                                                                   
++---------------+----------+--------------+------------------+                                                          
+| File          | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++---------------+----------+--------------+------------------+
+| binlog.000007 |      715 |              |                  |
++---------------+----------+--------------+------------------+
+1 row in set (0.001 sec)
+
+#####################
+ind-ssob-rh8-mariadb1
+#####################
+
+MariaDB [(none)]> CHANGE MASTER TO                                                                                      
+    -> MASTER_HOST='ind-ssob-rh8-mariadb2.ind2.sth.basefarm.net',                                                       
+    -> MASTER_USER='repl',                                                                                              
+    -> MASTER_PASSWORD='supersecretpassword',                                                                           
+    -> MASTER_PORT=3306,                                                                                                
+    -> MASTER_LOG_FILE='binlog.000007',                                                                                 
+    -> MASTER_LOG_POS=715;                                                                                              
+Query OK, 0 rows affected (0.007 sec) 
+
+MariaDB [(none)]> START REPLICA;                                                                                        
+Query OK, 0 rows affected, 1 warning (0.000 sec) 
+
+#####################
+ind-ssob-rh8-mariadb1
+#####################
+
+[root@ind-ssob-rh8-mariadb1 mariadb]# /opt/DAM/sbin/mariadb_vip_admin.sh status                                         
+-------------------------------------------------------------------------------------------------------------------     
+Status for VIP: 10.251.17.77
+-------------------------------------------------------------------------------------------------------------------
+HOST                                            ROLE        MARIADB         READ_ONLY     SECONDS_BEHIND_MASTER
+-------------------------------------------------------------------------------------------------------------------
+ind-ssob-rh8-mariadb1.ind2.sth.basefarm.net     Standby     Running         No            NULL       
+ind-ssob-rh8-mariadb2.ind2.sth.basefarm.net     Standby     Not running                              
+-------------------------------------------------------------------------------------------------------------------
+
+[root@ind-ssob-rh8-mariadb1 mariadb]# /opt/DAM/sbin/mariadb_vip_admin.sh up                                             
+Bringing up the 10.251.17.77 VIP on ind-ssob-rh8-mariadb1.ind2.sth.basefarm.net... Done
+
+
+replication borked, mariadb user passwords were not correctly set.
+
+#####################
+ind-ssob-rh8-mariadb1
+#####################
+
+[root@ind-ssob-rh8-mariadb1 .ssh]# /opt/DAM/sbin/mariadb_post_setup.sh -p                                               
+                                                                                                                        
+/opt/DAM/sbin/mariadb_post_setup.sh -r o6Mrl8Fz9RCodl4fv6MZ1rhk -b 5vnbXMt8Bo8MCEn10KCFyaMT -t jN2rIiSdL8/ZouT+26Ak9juL
+
+
+#####################
+ind-ssob-rh8-mariadb2
+#####################
+
+[root@ind-ssob-rh8-mariadb2 .ssh]# /opt/DAM/sbin/mariadb_post_setup.sh -r o6Mrl8Fz9RCodl4fv6MZ1rhk -b 5vnbXMt8Bo8MCEn10KCFyaMT -t jN2rIiSdL8/ZouT+26Ak9juL
+
+Changed binlog position on ind-ssob-rh8-mariadb1 to 2956 (this changed since I edited the mariadb users on ind-ssob-rh8-mariadb2)
+

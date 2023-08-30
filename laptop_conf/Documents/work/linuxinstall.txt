@@ -1,0 +1,87 @@
+https://int.basefarm.com/display/Service/01.+Introduction
+
+
+1.7 Operating system
+--------------------
+Choose and install your favorite OS. (Tip: use the same user account name as in DAM) 
+The following procedure must be followed: Procedure for installing a PC or Mac. - remember to sign the documents and hand it to Internal IT (Rune)
+ 
+
+Antivirus and local firewall must be activated on all OS's
+
+Antivirus Ubuntu Linux:
+
+ 
+$ sudo apt-get install clamav
+$ sudo freshclam
+$ sudo crontab -e
+
+ 
+crontab contents
+
+ 
+# Update ClamAV definitions - Daily Check
+18 08 * * * /usr/bin/freshclam --log="/var/log/clamav/freshclam-$date +\%b-\%d-\%Y).log" 2>/dev/null
+# ClamAV - Daily Scan
+20 08 * * * /usr/bin/clamscan / --exclude-dir=/sys --exclude-dir=/dev --exclude-dir=/proc -r -i --cross-fs=yes --log="/var/log/clamav/clamscan-$(date +\%b-\%d-\%Y).log" 2>/dev/null
+
+ 
+
+Firewall Ubuntu Linux:
+
+ 
+$ sudo ufw enable
+$ sudo ufw default deny
+
+
+Setting up Linux with OpenConnect client
+----------------------------------------
+
+Get a signed certificate using the same procedure as in the GUI instructions. Install the openconnect package, then use the following command line to connect:
+
+$ openconnect --certificate "$HOME/.cert/adca-$USER.crt" --sslkey "$HOME/.cert/adca-$USER.key" bastion-vpn.osl.basefarm.net
+
+
+Verify certificate expiry
+.........................
+If you followed the guide above, your certificate should be stored as $HOME/.cert/adca-$USER.crt. You can check how long the certificate is valid with the following command:
+
+ frode@Miramar ~ % openssl x509 -in $HOME/.cert/adca-$USER.crt -noout -text  | grep After
+            Not After : Jan  5 16:32:51 2021 GMT
+
+Please note that if your local username on your laptop does not correspond with your DAM/BF username, you will have to replace $USER with your actual DAM/BF username.
+
+
+
+------------------------------------------------------------------------------------------
+
+
+Setting up Linux with Anyconnect client
+---------------------------------------
+    Create local directories for certificates and keys and limit access to them. Then generate a key pair and a corresponding CSR file
+
+    mkdir -p ~/.cisco ~/.cisco/certificates ~/.cisco/certificates/client ~/.cisco/certificates/client/private ~/.cisco/certificates/ca
+    chmod -R go-rwx ~/.cisco
+    openssl req -sha256 -newkey rsa:4096 -subj "/CN=$USER/" -keyout ~/.cisco/certificates/client/private/$USER-anyconnect.key -out ~/$USER-anyconnect.csr -nodes
+
+    Go to https://adca.basefarm.com/certsrv/certcarc.asp , select "Download CA certificate" with "Base 64" encoding method and save it.  It will be downloaded as certnew.cer, but rename it to basefarm-ca.pem and place it into ~/.cisco/certificates/ca
+
+    Go to https://adca.basefarm.com/certsrv/certrqxt.asp , paste the contents of ~/$USER-anyconnect.csr into the request text field. Certificate template should be "Access Bastion" and additional attributes should be blank. Hit Submit.
+    The certificate should now be issued. Download the certificate (not certificate chain) in Base64 format. It will be downloaded as certnew.cer, but rename it to $USER-anyconnect.pem and place it into ~/.cisco/certificates/client.
+
+    In order for your browser to be able to log into the VPN, create a certificate package, choosing some passphrase:
+
+     openssl pkcs12 -export -out ~/$USER-anyconnect.pfx -inkey  ~/.cisco/certificates/client/private/$USER-anyconnect.key -in ~/.cisco/certificates/client/$USER-anyconnect.pem -certfile ~/.cisco/certificates/ca/basefarm-ca.pem
+
+    In case of Firefox, open the browser, select "Preferences", "Privacy & Security", go to the bottom of the page, select "View Certificates" and under "Your certificates" select "Import...". There you should select your newly created certificate package $USER-anyconnect.pfx (where $USER is your local Linux user name) and type in the previously selected passphrase when primpted. Then delete the certificate package file and close your browser. The procedure for other browsers should be pretty much similar.
+    Reopen your browser, go to https://bastion-vpn.osl.basefarm.net and log in to fetch the Anyconnect client.
+    After the client is downloaded, choose the VPN "Basefarm OSL Bastion VPN" to connect to from the drop down list. If this cannot be selected, type in "bastion-vpn.osl.basefarm.net" before clicking connect.
+
+Verify certificate expiry
+.........................
+If you followed the guide above, your certificate should be stored as ~/.cisco/certificates/client/$USER-anyconnect.pem. You can check how long the certificate is valid with the following command:
+
+ frode@Miramar ~ % openssl x509 -in ~/.cisco/certificates/client/$USER-anyconnect.pem -noout -text  | grep After
+            Not After : Jan  5 16:32:51 2021 GMT
+
+Please note that if your local username on your laptop does not correspond with your DAM/BF username, you will have to replace $USER with your actual DAM/BF username.

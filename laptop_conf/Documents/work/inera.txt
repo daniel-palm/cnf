@@ -1,0 +1,9 @@
+Tjänsteobjekt?
+
+Inera uppdelad i tjänster
+Varje tjänst har en egen förvaltning
+Varje tjänst är en egen "kund" = tjänsteobjekt
+
+
+Inera Common = AD, ActiveMQ, Bitbucket, ClamAV, ElasticStack, Hyper-V, Jenkins osv.
+

@@ -1,0 +1,90 @@
+" ██▒   █▓ ██▓ ███▄ ▄███▓ ██▀███   ▄████▄
+" ▓██░   █▒▓██▒▓██▒▀█▀ ██▒▓██ ▒ ██▒▒██▀ ▀█
+"  ▓██  █▒░▒██▒▓██    ▓██░▓██ ░▄█ ▒▒▓█    ▄
+"   ▒██ █░░░██░▒██    ▒██ ▒██▀▀█▄  ▒▓▓▄ ▄██▒
+"    ▒▀█░  ░██░▒██▒   ░██▒░██▓ ▒██▒▒ ▓███▀ ░
+"    ░ ▐░  ░▓  ░ ▒░   ░  ░░ ▒▓ ░▒▓░░ ░▒ ▒  ░
+"    ░ ░░   ▒ ░░  ░      ░  ░▒ ░ ▒░  ░  ▒
+"      ░░   ▒ ░░      ░     ░░   ░ ░
+"       ░   ░         ░      ░     ░ ░
+
+ set nocompatible    " use vim defaults
+ set ls=2            " allways show status line
+ set tabstop=4       " numbers of spaces of tab character
+ set shiftwidth=4    " numbers of spaces to (auto)indent
+ set scrolloff=3     " keep 3 lines when scrolling
+ set cindent         " cindent
+ set smartindent     " smart indent
+ set autoindent      " always set autoindenting on
+ set showcmd         " display incomplete commands
+ set hlsearch        " highlight searches
+ set incsearch       " do incremental searching
+ set ruler           " show the cursor position all the time
+ set visualbell t_vb=    " turn off error beep/flash
+ set novisualbell    " turn off visual bell
+ set nobackup        " do not keep a backup file
+" set number          " show line numbers
+ set ignorecase      " ignore case when searching 
+ "set noignorecase   " don't ignore case
+ set title           " show title in console title bar
+ set ttyfast         " smoother changes
+ "set ttyscroll=0        " turn off scrolling, didn't work well with PuTTY
+ set modeline        " last lines in document sets vim mode
+ set modelines=3     " number lines checked for modelines
+ set shortmess=atI   " Abbreviate messages
+ set nostartofline   " don't jump to first character when paging
+ set whichwrap=b,s,h,l,<,>,[,]   " move freely between files
+ "set viminfo='20,<50,s10,h
+
+ "set autowrite      " auto saves changes when quitting and swiching buffer
+ "set expandtab      " tabs are converted to spaces, use only when required
+ "set sm             " show matching braces, somewhat annoying...
+ "set nowrap         " don't wrap lines
+
+syntax on           " syntax highlighing
+set background=dark
+"set mouse=v "mouse won't paste without this option in slackware 12.0
+set mouse=r
+
+" Set cterm colors. Some are set here even though they are equal to their
+" " default settings because the GUI settings need to be modified
+"
+ hi normal	cterm=none	ctermfg=grey		ctermbg=none
+
+" hi cursor	cterm=none	ctermfg=black		ctermbg=green
+" hi diffadd	cterm=none	ctermfg=darkblue	ctermbg=darkgreen
+" hi diffchange	cterm=none	ctermfg=black		ctermbg=darkyellow
+" hi diffdelete	cterm=none	ctermfg=darkblue	ctermbg=none
+" hi difftext	cterm=none	ctermfg=darkred		ctermbg=darkyellow
+" hi foldcolumn	cterm=none	ctermfg=yellow		ctermbg=darkblue
+" hi folded	cterm=none	ctermfg=yellow		ctermbg=darkblue
+" hi incsearch	cterm=none	ctermfg=grey		ctermbg=darkblue
+" hi moremsg	cterm=bold	ctermfg=green		ctermbg=none
+" hi nontext	cterm=none	ctermfg=blue		ctermbg=none
+" hi search	cterm=none	ctermfg=darkblue	ctermbg=darkcyan
+" hi specialkey	cterm=none	ctermfg=blue		ctermbg=none
+" hi statusline	cterm=none	ctermfg=darkblue	ctermbg=grey
+" hi statuslinenc	cterm=reverse	ctermfg=none		ctermbg=none
+" hi title	cterm=none	ctermfg=magenta		ctermbg=none
+" hi visual	cterm=none	ctermfg=none		ctermbg=darkblue
+" hi visualnos	cterm=none	ctermfg=none		ctermbg=darkgrey
+ hi warningmsg	cterm=bold	ctermfg=red		ctermbg=none
+
+ hi comment	cterm=none	ctermfg=darkgrey		ctermbg=none
+ hi constant	cterm=none	ctermfg=darkgreen	ctermbg=none
+" hi error	cterm=none	ctermfg=white		ctermbg=red
+" hi identifier	cterm=none	ctermfg=darkcyan	ctermbg=none
+" hi ignore	cterm=none	ctermfg=darkgrey	ctermbg=none
+ hi preproc	cterm=none	ctermfg=lightgreen		ctermbg=none
+" hi special	cterm=none	ctermfg=darkgreen	ctermbg=none
+ hi statement	cterm=none	ctermfg=white 		ctermbg=none
+" hi todo		cterm=none	ctermfg=black		ctermbg=yellow
+" hi type		cterm=none	ctermfg=green		ctermbg=none
+ hi underlined	cterm=none	ctermfg=darkmagenta	ctermbg=none
+
+" syntax hilight '#todo'
+ au BufRead,BufNewFile *.todo setfiletype todo
+
+ if getline(1) =~? '^#\?TODO\>'
+	setfiletype todo
+ endif

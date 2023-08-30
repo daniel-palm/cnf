@@ -1,0 +1,25 @@
+https://docs.github.com/en/get-started/using-git/pushing-commits-to-a-remote-repository
+
+#From work laptop
+cd ~/.config/work
+git init
+git add <file>
+git commit -m "something"
+git remote add origin https://github.com/daniel-palm/config.git
+git push -u origin 
+git push --set-upstream origin dotfiles
+
+
+#get notes
+	cd ~/.config/work
+	git init
+	git add <file>
+	git commit -m "something"
+	git remote add origin https://github.com/daniel-palm/work.git
+	git push -u origin home
+
+#get current version of repo
+	git pull
+
+
+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
