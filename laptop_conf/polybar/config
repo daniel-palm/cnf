@@ -1,0 +1,186 @@
+### Colors ###
+[colors]
+background = #282828
+foreground = #ebdbb2
+background-alt = #335B26
+foreground-alt = #FFFFFF
+
+### Bar Settings ###
+[bar/mybar]
+width = 46%
+height = 14
+offset-y = 0
+offset-x = 4
+fixed-center = true
+background = #282828
+background-alt = ${colors.background-alt}
+foreground = ${colors.foreground}
+#tray-position = center
+module-margin = 0
+#line-size = 1
+#line-color = #FFFFFF
+radius = 3.0
+#border-size = 2
+border-color = #737373
+pseudo-transparency = false
+
+### Fonts ###
+font-0 = "Hack Nerd Font:size=10;3"
+font-1 = "Ubuntu Nerd Font:size=10;2"
+font-2 = "JetBrainsMono:size=8;2"
+font-3 = "NotoColorEmoji:scale=14;1"
+font-4 = "Monoki:size=8;2"
+
+scroll-down = bspc desktop -f prev.local
+scroll-up = bspc desktop -f next.local
+#wm-name = bspwm
+#wm-restack = bspwm
+#enable-ipc = true
+override-redirect = true
+cursor-click = pointer
+cursor-scroll = ns-resize
+modules-left = bspwm title 
+modules-center =
+modules-right = bat redshift network checkupdates vol sink clock
+
+
+[module/bspwm]
+type = internal/bspwm
+pin-workspaces = false
+enable-click = true
+fuzzy-match = true
+enable-scroll = false
+label-focused = %icon%
+label-focused-font = 1
+label-focused-padding = 1
+label-focused-foreground = #cc241d
+label-focused-background =  ${colors.background}
+label-occupied-background = ${colors.background]
+label-occupied = %icon%
+label-occupied-padding = 1
+label-occupied-foreground = #b8bb26
+label-occupied-font = 1
+label-urgent-foreground = #eeeeee
+label-urgent = %name%
+label-urgent-padding = 1
+label-urgent-font = 1
+label-empty-foreground = #a2a2a0
+label-empty = 
+label-empty-padding = 1
+label-empty-font = 1
+ws-icon-default = 
+
+[module/title]
+type = internal/xwindow
+format = <label>
+label-background = ${colors.background}
+label-foreground = ${colors.foreground}
+label-empty-background = ${colors.background}
+label-empty-foreground = ${colors.foreground}
+label = "~/%title%"
+label-empty = "<empty>"
+format-padding = 0
+label-maxlen = 40
+label-minlen = 40
+label-font = 3
+label-empty-font = 3
+
+[module/network]
+type = custom/script
+exec = ~/.config/polybar/scripts/network.sh -h
+format-prefix-foreground = ${colors.foreground}
+format-prefix =
+format-prefix-font = 3
+label = "%output%"
+label-font = 3
+label-foreground = ${colors.background}
+label-background = #db4f2d
+interval = 30
+click-middle = $(/home/$USER/.config/polybar/scripts/network.sh -r)
+click-right = $(/home/$USER/.config/scripts/wifi.sh)
+click-left = notify-send "🏡localip: $(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')" && notify-send "🔐vpnip: $(ip a |grep vpn | sed '1d' | cut -c 10- | awk '{print $1;}')" && notify-send "💻hostname: $(nmcli general hostname)" 
+
+[module/clock]
+type = custom/script
+exec = ~/.config/polybar/scripts/clock.sh -d
+label = "🗓️%output%"
+label-font = 3
+label-foreground = ${colors.background}
+label-background = ${colors.foreground}
+format-prefix-font = 1
+interval = 60
+click-left = $(/home/$USER/.config/polybar/scripts/clock.sh -w)
+click-right = $(/home/$USER/.config/polybar/scripts/clock.sh -c)
+
+[module/bat]
+type = custom/script
+exec = ~/.config/polybar/scripts/mod_bat
+format-prefix =
+label = " %output%"
+label-font = 3
+label-foreground = ${colors.foreground}
+label-background = ${colors.background}
+format-prefix-font = 1
+interval = 30
+
+[module/vol]
+type = custom/script
+exec = ~/.config/polybar/scripts/vol.sh
+format-prefix =
+label = "%output% "
+label-font = 3
+label-foreground = ${colors.background}
+label-background = #d3869b
+format-prefix-font = 1
+interval = 3
+click-left = ~/.config/polybar/scripts/pulseaudio-control.bash togmute
+
+[module/sink]
+type = custom/script
+exec = ~/.config/polybar/scripts/sink.sh
+format-prefix =
+label = "*%output% "
+label-font = 3
+label-foreground = ${colors.background}
+label-background = #98971a
+format-prefix-font = 1
+interval = 3
+click-right = exec pavucontrol &
+click-middle = pulseaudio-control --node-blacklist "alsa_output.pci-0000_00_1f.3-platform-skl_hda_dsp_generic.HiFi__hw_sofhdadsp_5__sink","alsa_output.pci-0000_00_1f.3-platform-skl_hda_dsp_generic.HiFi__hw_sofhdadsp_3__sink" next-node
+
+[module/pulseaudio-control]
+type = custom/script
+tail = true
+label-font = 3
+#pactl list sinks short	 -  to get sink names vvv
+exec = /usr/bin/pulseaudio-control --icons-volume "🔉 ,🔊 " --icon-muted "🔇 " --node-nickname "alsa_output.pci-0000_00_1f.3-platform-skl_hda_dsp_generic.HiFi__hw_sofhdadsp__sink:cmp" --node-nickname "alsa_output.usb-Logitech_G733_Gaming_Headset-00.analog-stereo:hds|" --node-nickname "alsa_output.pci-0000_00_1f.3-platform-skl_hda_dsp_generic.HiFi__hw_sofhdadsp_4__sink:dis|" --node-nickname "bluez_sink.E8_85_4B_49_5C_1C.a2dp_sink:air|" --node-nickname "bluez_sink.E8_85_4B_49_5C_1C.handsfree_head_unit:air|" --node-nickname "bluez_sink.90_9C_4A_EB_0C_69.a2dp_sink:air|" listen
+click-right = exec pavucontrol &
+click-middle = pulseaudio-control --node-blacklist "alsa_output.pci-0000_00_1f.3-platform-skl_hda_dsp_generic.HiFi__hw_sofhdadsp_5__sink","alsa_output.pci-0000_00_1f.3-platform-skl_hda_dsp_generic.HiFi__hw_sofhdadsp_3__sink" next-node
+label-foreground = ${colors.foreground}
+format-foreground = ${colors.foreground}
+label-background = ${colors.background}
+
+[module/checkupdates]
+type = custom/script
+exec = ~/.config/polybar/scripts/checkupdates.sh
+label-font = 3
+format-prefix-font = 3
+interval = 600
+label = %output%
+label-background = #d79921
+label-foreground = ${colors.background}
+
+[module/redshift]
+type = custom/script
+label = %output%
+label-background = #689d6a
+label-foreground = ${colors.background}
+format-prefix = ""  
+format-prefix-font = 3
+format-prefix-background = #689d6a
+format-prefix-foreground = ${colors.background}
+exec = source ~/.config/polybar/scripts/env.sh && ~/.config/polybar/scripts/redshift.sh temperature 
+click-left = source ~/.config/polybar/scripts/env.sh && ~/.config/polybar/scripts/redshift.sh toggle 
+scroll-up = source ~/.config/polybar/scripts/env.sh && ~/.config/polybar/scripts/redshift.sh increase
+scroll-down = source ~/.config/polybar/scripts/env.sh && ~/.config/polybar/scripts/redshift.sh decrease
+interval=0.5
