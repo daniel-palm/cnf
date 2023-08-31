@@ -18,8 +18,8 @@ laptop
 
 git pw
 #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
-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
-
+#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
+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
 #usual procedure
 cd ~/.config/cnf
 git init
