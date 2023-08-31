@@ -1,0 +1,134 @@
+e Common hotkeys
+alt + l
+	pulseaudio-control --node-blacklist "alsa_output.pci-0000_00_1f.3.pro-output-1","alsa_output.pci-0000_01_00.1.pro-output-9","alsa_output.pci-0000_01_00.1.pro-output-8","alsa_output.pci-0000_01_00.1.pro-output-3","alsa_output.pci-0000_00_1f.3.pro-output-0" next-node && ~/.config/polybar/scripts/sink.sh && notify-send "sink changed"
+#
+# terminal emulator
+super + Return
+	urxvt
+
+# program launcher
+super + d
+	rofi -show run -location 8
+super + shift + d
+	rofi -show
+alt + d
+	exec /home/derpalm/.config/scripts/display.sh
+
+super + e
+	rofi -show emoji -modi emoji -matching normal
+
+super + n
+	nm-connection-editor
+
+super + v
+	vscode-projects
+
+super + w
+	win_switcher
+
+alt + @space
+	clipmenu
+
+super + b
+	zathura-rofi
+
+alt + x
+	xscreensaver-command -lock
+
+super + x
+	exec /home/chug/.config/scripts/lock.sh
+
+alt + shift + w
+	exec /home/chug/.config/scripts/remote.sh
+
+super + shift + b
+	firefox
+
+super + shift + m
+	$TERMINAL -e ncmpcpp
+
+super + shift + f
+	$FM
+
+super + m
+	exec /home/chug/.config/scripts/screenshot.sh
+
+
+#        maim -s | xclip -selection clipboard -t image/png
+
+super + Print
+	flameshot gui
+
+super + shift + z
+        betterlockscreen -l blur
+
+super + shift + {plus,minus}
+    pactl set-sink-volume 0 {+,-}8%
+
+super + {minus,equal}
+    mpc seek {-,+}5%
+
+super + shift + r
+     mpc seek 0 && current_song
+
+super + alt + p
+     mpc toggle
+super + c
+     mpv ~/Music/wow.mp3
+
+super + shift + p
+     pactl set-sink-mute 0 toggle
+
+super + alt + {comma, period}
+    mpc {prev,next} && current_song
+
+XF86MonBrightnessDown
+	xbacklight -dec 10
+XF86MonBrightnessUp
+	xbacklight -inc 10
+
+super + shift + n
+	redshift -P -O {4500, 6500}
+
+#
+
+
+alt + m
+	urxvt -e ncmpcpp
+
+
+alt + 1
+      $BROWSER https://www.google.com
+alt + 2
+      $BROWSER https://www.youtube.com
+
+alt + {5,6}
+      $BROWSER http://127.0.0.1:{5000,8000}/
+
+
+
+# Toggle mute
+alt + m
+	/home/chug/.config/polybar/scripts/mute_toggle.sh -m
+
+
+#toggle volume
+
+
+# Raise Volume
+alt + p
+	/home/chug/.config/polybar/scripts/mute_toggle.sh -u
+	#amixer -D pulse sset Master 5%+ && notify-send "Volume" "-5%"
+	
+# Lower Volume
+alt + o
+	/home/chug/.config/polybar/scripts/mute_toggle.sh -d
+	#[-z "$(amixer -D pulse sset Master 5%+)" ] && notify-send "Volume" "-5%"
+
+
+
+shift + XF86MonBrightnessDown
+	xbacklight -set 1
+
+shift + XF86MonBrightnessUp 
+	xbacklight -set 100

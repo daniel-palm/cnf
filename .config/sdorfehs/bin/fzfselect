@@ -1,0 +1,3 @@
+#!/bin/sh
+# abstract: fzfselect
+exec ~/.config/sdorfehs/bin/wselect $(sdorfehs -c 'windows'|fzfmenu)

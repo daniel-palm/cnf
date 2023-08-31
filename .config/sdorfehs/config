@@ -1,0 +1,183 @@
+# vim:ft=ratpoison:
+escape C-f
+#exec ~/.config/sdorfehs/status.sh > ~/.config/sdorfehs/bar
+
+#---------------------------------------------------------------------------
+# main options
+# https://www.japh.se/202/1/03/21/ratpoison-urxvt-and-borders.html
+#---------------------------------------------------------------------------
+set barbordercolor    #121212
+set barinpadding      1
+set barpadding        0 0 
+set barsticky         1
+set bgcolor           #121212
+set bwcolor           #121212
+set fwcolor           #C1C1C1
+set border            5
+set fgcolor           #C1C1C1
+#set font              "ypn envypn:style=Regular:pixelsize=10:antialias=1:hinting=1:hintstyle=3"
+set font              "Terminus:style=Regular:pixelsize=10:antialias=1"
+set framefmt          frame %f (%Wx%H)
+set framemsgwait      3
+#set framemsgwait      -1
+# inner frame padding
+set gap               2
+set historysize       20
+set ignoreresizehints 1
+set maxsizegravity    c
+set maxundos          20
+set msgwait           3
+set onlyborder        1
+#set padding           1 0 0 0
+# outer padding
+set padding           8 8 8 8
+set resizefmt         resize (%Wx%H)
+set resizeunit        5
+#set rudeness          15
+set startupmessage    0
+set stickyfmt         %t
+set topkmap           top
+set transgravity      c
+set vscreens          5
+set warp              0
+set winfmt            %n%s%t
+set wingravity        nw
+set winliststyle      column
+set winname           title
+
+#---------------------------------------------------------------------------
+# unbind useless or dangerous defaults
+#---------------------------------------------------------------------------
+unbind k
+unbind n
+unbind v
+unbind w
+
+#---------------------------------------------------------------------------
+# applications
+#---------------------------------------------------------------------------
+bind a exec sdorfehs -c "echo `date`"
+
+bind C exec urxvt -fg white -bg '#1e1727' -sbg +sb
+#bind c exec urxvt -fg white -bg black -sbg +sb
+
+# weird bug in rxvt where the PS1 shows at the bottom
+bind c exec urxvt -e zsh -c 'clear;zsh'
+
+#bind x exec xterm
+
+# scratch buffer for temp things
+bind Return exec urxvt -fg white -bg black -sbg +sb -e vim -c 'call Scratch()'
+bind C-Return exec urxvt -fg white -bg black -sbg +sb -e vim -c 'call Scratch()'
+
+#---------------------------------------------------------------------------
+# workspaces/vscreens - win+n
+#---------------------------------------------------------------------------
+definekey top s-1 vselect 0
+definekey top s-2 vselect 1
+definekey top s-3 vselect 2
+definekey top s-4 vselect 3
+definekey top s-5 vselect 4
+definekey top s-6 vselect 5
+
+#---------------------------------------------------------------------------
+# mpd haxx
+#---------------------------------------------------------------------------
+bind n exec mpc --host 192.168.1.12 prev
+bind p exec mpc --host 192.168.1.12 next && mpd-cp-coverart-to-tmp
+bind o exec mpc --host 192.168.1.12 toggle
+
+# show coverart of the currently playing song
+# (win+Return)
+
+
+# open a new terminal in the currently playing artist directory
+# (alt+Return)
+definekey top M-Return exec mpd-goto-artist-dir
+
+# open a new terminal in the currently playing album directory
+# (alt+backspace)
+definekey top M-BackSpace exec mpd-goto-album-dir
+
+
+#---------------------------------------------------------------------------
+# window management
+#---------------------------------------------------------------------------
+
+bind s split
+bind S hsplit
+
+bind h focusleft
+bind j focusdown
+bind k focusup
+bind l focusright
+
+# left monitor
+bind H exec  ~/.config/sdorfehs/bin/sselect_skip_top_monitor left
+# right monitor
+bind L exec ~/.config/sdorfehs/bin/sselect_skip_top_monitor right
+# middle monitor
+bind J sselect 1
+# top monitor
+bind K sselect 2
+
+bind C-K kill
+
+# move window to another named vscreen
+bind G vmove
+
+# move window to another monitor
+bind g smove
+
+# select vscreens and windows with fzf and st
+unbind v
+bind v exec fzfvselect
+unbind w
+bind w exec fzfselect
+
+# dbeaver doesn't behave and ignores the primary buffer
+bind Escape exec clipboard-to-primary
+
+# bind Tab exec sdorfehs -c "set barbordercolor black" -c "set bgcolor #d3ceb9" -c "set barborder 6" -c "set barpadding 24 14" -c "set border 6" -c "set fgcolor #444444" -c "set padding 40 40 40 40" -c "set onlyborder 1"
+bind ISO_Left_Tab restart
+
+# dmenu-like 'select and run', but using fzf (thank you for the inspiration wassberg)
+bind b exec st -e sh -c $(ls ~/dev/utils /usr/bin /bin |fzfmenu)
+
+# web development view, split firefox and a terminal
+bind W exec sdorfehs -c "hsplit" -c "resize 200 0"
+
+#---------------------------------------------------------------------------
+# init and startup
+#---------------------------------------------------------------------------
+
+vselect 0
+vrename [1]slack
+vselect 1
+vrename [2]work
+vselect 2
+vrename [3]notes
+vselect 3
+vrename [4]teams
+vselect 4
+vrename [5]misc
+vselect 5
+vrename [6]slask
+vselect 6
+vrename [6]slask2
+vselect 7
+vrename [7]slask2
+vselect 8
+vrename mail
+vselect 9
+vrename music
+exec pavucontrol
+hsplit
+focusright
+exec pulseeffects
+iprev
+
+
+# exec ~/.config/scripts/bg.sh
+exec nitrogen --restore &
+exec ~/.config/sdorfehs/barscript2.sh > ~/.config/sdorfehs/bar

@@ -1,0 +1,53 @@
+#xpo general settings
+set startupmessage 0
+set padding 10 10 10 10
+set gap 10
+set ignoreresizehints 1
+set onlyborder 0
+set border 4
+set font envypn:pixelsize=12:antialias=false
+set barsticky 0
+set fwcolor #ebdbb2
+set bwcolor #282828
+set bgcolor #282828
+set fgcolor #ebdbb2
+
+# frame splits
+definekey top s-S split
+definekey top s-s hsplit
+
+# focus
+definekey top s-Left focusleft 
+definekey top s-Right focusright
+definekey top s-Up focusup
+definekey top s-Down focusdown
+definekey top s-n next
+
+# frame things
+definekey top s-f swap
+definekey top s-x remove
+definekey top s-C-Left exchangeleft
+definekey top s-C-Right exchangeright
+definekey top s-C-Up exchangeup
+definekey top s-C-Down exchangedown
+
+# vscreens
+set vscreens 5
+
+definekey top s-2 vselect 0
+definekey top s-0 vselect 1
+definekey top s-4 vselect 2
+definekey top s-8 vselect 3
+definekey top s-6 vselect 4
+
+definekey top C-0 vmove 0
+definekey top C-1 vmove 1
+definekey top C-2 vmove 2
+definekey top C-3 vmove 3
+definekey top C-4 vmove 4
+
+# load colors
+#exec ~/etc/sdorfehs/colors
+
+alias term exec urxvt
+alias bgset exec ~/.config/scripts/bg.sh

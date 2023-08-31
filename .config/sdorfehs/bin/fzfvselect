@@ -1,0 +1,4 @@
+#!/bin/sh
+# abstract: fzfvselect
+exec ~/.config/sdorfehs/bin/vselect $(vselect_sort_current_vscreen_first|fzfmenu)
+#vselect $(sdorfehs -c 'vscreens'|fzfmenu)
