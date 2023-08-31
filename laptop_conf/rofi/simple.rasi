@@ -1,0 +1,88 @@
+configuration {
+	display-drun: "";
+	display-run: "";
+	display-window: "缾";
+	icon-theme: "Papirus-Light";
+	font: "JetBrains Mono 10";
+}
+
+@import "colors"
+
+scrollbar {
+	width: 0;
+	handle-width: 0;
+}
+
+window {
+	fullscreen: false;
+	background-color: black/0%;
+	width: 20%;
+	children: [mainbox];
+}
+
+mainbox {
+	location: center;
+	anchor: center;
+	spacing: 3;
+	background-color: @transparent;
+	border: 0;
+	border-color: @fg;
+	transparency: "real";
+	children: [inputbar, listview];
+}
+
+inputbar {
+	background-color: @bg;
+	text-color: @fg;
+	border: 1;
+	border-color: @fg;
+	children: [prompt, entry];
+}
+
+prompt {
+	background-color: @transparent;
+	text-color: @fg;
+	border: 0;
+}
+
+entry {
+	background-color: @transparent;
+	text-color: @fg;
+	placeholder: "";
+	padding: 0.5em 0 0.5em 0;
+	border: 0;
+}
+
+listview {
+	background-color: @transparent;
+	cycle: false;
+	dynamic: true;
+	padding: 0 0 0 0;
+	border: 0;
+	columns: 1;
+	spacing: 0;
+	children: [element];
+}
+
+element {
+	padding: 0px;
+	border: 0;
+}
+
+element selected {
+	background-color: @transparent;
+	text-color: @fg;
+	border: 0;
+}
+
+element-text {
+	background-color: @bg	;
+	text-color: @fg;
+	border: 0;
+}
+
+element-text selected {
+	background-color: @bg2;
+	text-color: #da1313;
+	border: 0;
+}

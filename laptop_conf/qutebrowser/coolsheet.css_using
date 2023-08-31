@@ -1,0 +1,168 @@
+html,
+
+* {
+}
+
+
+body {
+	background-color: #1B1B1B !important;
+}
+
+body * {
+}
+
+a,
+a * {
+}
+.note.Public {   background-color: #ad6f27 !important; }
+.note.Private {   background-color: #4f7652 !important; }
+
+.gridcolor-chg {   background-color: #905714 !important; }
+.gridcolor-srq {   background-color: #ad6f27 !important; }
+
+.gridcolor-evt {
+  background-color: #295878 !important;
+}
+
+.gridcolor-inc {
+  background-color: #c93939 !important;
+}
+
+.gridcolor-waitcust {
+  font-style: italic;
+  color: #FFFFFF !important;
+}
+.gridcolor-highpri {
+  background-color: #d86d6d !important;
+}
+
+.gridcolor-new {
+  font-weight: 700;
+}
+
+
+div.
+row {
+
+}
+
+
+a:hover,
+a:hover *,
+a:visited:hover,
+a:visited:hover *,
+span[onclick]:hover,
+div[onclick]:hover,
+[role="link"]:hover,
+[role="link"]:hover *,
+[role="button"]:hover *,
+[role="menuitem"]:hover,
+[role="menuitem"]:hover *,
+.link:hover,
+.link:hover * {
+	color: #FFFFFF !important;
+	background-color: #F10490 !important;
+}
+a:link {
+	color: #FFFFFF !important;
+}
+a:visited,
+a:visited * {
+	color: #2cfb7b !important;
+}
+
+legend {
+	color: #F5C2E7 !important;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+[id*="headline"],
+[class*="headline"],
+[id*="header"],
+[class*="header"],
+[class*="header"] td {
+}
+
+table {
+	background-color: #1B1B1B !important;
+}
+
+[id*="overlay"],
+[id*="lightbox"],
+blockquote {
+	background-color: rgba(68, 71, 90, 1) !important;
+}
+
+pre,
+dl {
+	background-color: #1B1B1B !important;
+}
+
+input,
+select,
+button,
+[role="button"],
+a.button,
+a.submit,
+a.BigButton,
+a.TabLink,
+.install[onclick] {
+	text-indent: 5px;
+	background: #1B1B1B !important;
+}
+
+textarea {
+	background: #1B1B1B !important;
+}
+
+div,
+ul,
+button,
+.style-scope yt-icon-button{
+}
+li {
+	background-color: #1B1B1B !important;
+
+}
+
+
+
+
+
+a.highlight,
+a.highlight *,
+a.active,
+a.active *,
+.selected,
+.selected *,
+[href="https://marval.basefarm.com/"] {
+	color: #FFFFFF !important;
+	background-color: #FFFFFF !important;
+}
+
+#container #header > .quickMenu {
+  background-color: #1B1B1B;
+  border-bottom: 1px solid #bbb7a1;
+  border-top: 1px solid #bbb7a1;
+}
+
+#header > .mainMenu {
+  top: 0;
+  z-index: 2;
+  background-color: #1B1B1B;
+}
+
+
+.cell.checkbox > input, .grid > .body > .row > .cell.checkbox > input {
+  height: 25px;
+  width: 25px;
+  cursor: default;
+}
+a.highlight.ctl00_cph_dictionary_7_inputs {
+  background-color: #FFFFFF !important;
+}

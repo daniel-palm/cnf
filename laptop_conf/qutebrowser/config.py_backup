@@ -1,0 +1,258 @@
+import subprocess
+import os
+from qutebrowser.api import interceptor
+
+"""
+
+qutebrowser settings for video
+
+for more settings check out
+https://qutebrowser.org/doc/help/settings.html
+"""
+
+# ================== Youtube Add Blocking ======================= {{{
+def filter_yt(info: interceptor.Request):
+    """Block the given request if necessary."""
+    url = info.request_url
+    if (
+        url.host() == "www.youtube.com"
+        and url.path() == "/get_video_info"
+        and "&adformat=" in url.query()
+    ):
+        info.block()
+
+
+interceptor.register(filter_yt)
+# }}}
+# =================== Launch Qutebrowser from Dmenu ====== {{{
+
+"""
+#!/bin/sh
+
+# Originally from lukesmith with some changes
+# Gives a dmenu prompt to search DuckDuckGo.
+# Without input, will open DuckDuckGo.com.
+# Anything else, it search it.
+
+LAUNCER="dmenu -l 5 -i -p "
+[ -z "${DISPLAY}" ] && LAUNCER="fzf --prompt "
+
+localBROWSER="$BROWSER "
+[ -n "$*" ] && localBROWSER="$*"
+[ -z "${DISPLAY}" ] && localBROWSER="w3m "
+
+if [ -f ~/.config/bookmarks ]; then
+	choice=$( (echo "🦆" && cat ~/.config/bookmarks) | $LAUNCER"Search:") || exit 1
+else
+	choice=$(echo "🦆" | $LAUNCER -i -p "Search DuckDuckGo:") || exit 1
+fi
+
+case "$choice" in
+*🦆*)
+	$localBROWSER"https://duckduckgo.com"
+	exit
+	;;
+http*)
+	$localBROWSER"$(echo $choice | awk '{print $1}')"
+	exit
+	;;
+*) $localBROWSER"https://duckduckgo.com/?q=$choice"
+	exit
+	;;
+esac
+#vim:ft=sh
+"""
+
+# }}}
+
+
+
+"""
+" PART OF MY VIMRC
+" I used minisnip to execute the vimscript but you could just use autocommands
+
+" Simple implementation of org-capture using minisnip
+function! CreateCapture(window, ...)
+        " file used to store all captures
+	let g:org_refile='~/Documents/org/refile.org'
+	if a:0 == 1 && a:1 == 'qutebrowser'
+		exec a:window . ' ' . g:org_refile
+		exec '$read ' . globpath(&rtp, 'extra/org/templateQUTE.org')
+	endif
+	call feedkeys("i\\<Plug>(minisnip)", 'i')
+endfunction
+"""
+
+"""
+" ~/.vim/extra/org/templateQUTE.org
+* TODO {{+~getreg('+')+}}
+SCHEDULED: <{{+~strftime(g:org_date_format)+}}>
+"""
+# }}}
+# ======================= External Open =================== {{{
+config.bind("V", "hint links spawn " + os.environ["BROWSER"] + ' "{hint-url}"')
+config.bind("v", 'hint links spawn funnel "{hint-url}"')
+config.bind("\\", 'spawn dmenuhandler "{url}"')
+# }}}
+# ======================= Redline Insert Mode ============= {{{
+
+config.bind("<Ctrl-h>", "fake-key <Backspace>", "insert")
+#config.bind("<Ctrl-a>", "fake-key <Home>", "insert")
+config.bind("<Ctrl-e>", "fake-key <End>", "insert")
+config.bind("<Ctrl-b>", "fake-key <Left>", "insert")
+config.bind("<Mod1-b>", "fake-key <Ctrl-Left>", "insert")
+config.bind("<Ctrl-f>", "fake-key <Right>", "insert")
+config.bind("<Mod1-f>", "fake-key <Ctrl-Right>", "insert")
+config.bind("<Ctrl-p>", "fake-key <Up>", "insert")
+config.bind("<Ctrl-n>", "fake-key <Down>", "insert")
+config.bind("<Mod1-d>", "fake-key <Ctrl-Delete>", "insert")
+config.bind("<Ctrl-d>", "fake-key <Delete>", "insert")
+config.bind("<Ctrl-w>", "fake-key <Ctrl-Backspace>", "insert")
+config.bind("<Ctrl-u>", "fake-key <Shift-Home><Delete>", "insert")
+config.bind("<Ctrl-k>", "fake-key <Shift-End><Delete>", "insert")
+config.bind("<Ctrl-r>", ":reload")
+config.bind("<Ctrl-x><Ctrl-e>", "open-editor", "insert")
+config.bind("<ctrl+o>", "set-cmd-text -s :open -t")
+config.bind("<Shift+b>", "set-cmd-text -s :bookmark-add")
+config.bind("<b>", "set-cmd-text -s :bookmark-load")
+config.bind("<ctrl+b>", "set-cmd-text -s :bookmark-load -t")
+config.bind("<q>", "set-cmd-text -s :quickmark-load")
+config.bind("<ctrl+q>", "set-cmd-text -s :quickmark-load -t")
+config.bind("<shift+q>", ":quickmark-save")
+config.bind("<shift+r>", ":set-cmd-text -s :set content.user_stylesheets coolsheet.css")
+config.bind("<j>", ":scroll down")
+config.bind("<k>", ":scroll up")
+config.bind("<d>", ":scroll up")
+config.bind("<m>", ":tab-mute")
+config.bind("<ctrl+h>", ":back")
+config.bind("<ctrl+l>", ":forward")
+config.bind("<shift+h>", ":open -t qute://history/")
+config.bind("<ctrl+p>", ":open -p")
+#config.bind("<pp>", "spawn --userscript qute-pass --dmenu-invocation dmenu")
+config.bind(',p', 'spawn --userscript qute-pass --dmenu-invocation dmenu')
+config.bind(',P', 'spawn --userscript qute-pass --dmenu-invocation dmenu --password-only')
+
+# }}}
+# ====================== xresources ======================= {{{
+# taken from https://qutebrowser.org/doc/help/configuring.html
+def read_xresources(prefix):
+    """
+    read settings from xresources
+    """
+    props = {}
+    x = subprocess.run(["xrdb", "-query"], stdout=subprocess.PIPE)
+    lines = x.stdout.decode().split("\n")
+    for line in filter(lambda l: l.startswith(prefix), lines):
+        prop, _, value = line.partition(":\t")
+        props[prop] = value
+    return props
+
+config.load_autoconfig(False)
+xresources = read_xresources("*")
+c.colors.statusbar.normal.bg = xresources['*color16']
+c.colors.statusbar.command.bg = xresources["*color16"]
+c.colors.statusbar.command.fg = xresources["*color17"]
+c.colors.statusbar.normal.fg = xresources["*color17"]
+
+c.statusbar.show = "always"
+
+c.colors.tabs.even.bg = xresources["*color16"]
+c.colors.tabs.odd.bg = xresources["*color16"]
+c.colors.tabs.even.fg = xresources["*color2"]
+c.colors.tabs.odd.fg = xresources["*color2"]
+c.colors.tabs.selected.even.bg = xresources["*background"]
+c.colors.tabs.selected.odd.bg = xresources["*background"]
+c.colors.tabs.selected.even.fg = xresources["*color19"]
+c.colors.tabs.selected.odd.fg = xresources["*color19"]
+c.colors.hints.bg = xresources["*background"]
+c.colors.hints.fg = xresources["*foreground"]
+c.tabs.show = "multiple"
+
+#right click menu
+c.colors.contextmenu.menu.bg = xresources["*background"]
+c.colors.contextmenu.menu.fg = xresources["*color2"]
+c.colors.contextmenu.selected.bg = xresources["*color2"]
+c.colors.contextmenu.selected.fg = xresources["*background"]
+
+
+#:set menu
+c.colors.completion.item.selected.bg = xresources["*color17"]
+c.colors.completion.item.selected.fg = xresources["*foreground"]
+c.colors.completion.item.selected.border.bottom = xresources["*foreground"]
+c.colors.completion.item.selected.border.top = xresources["*foreground"]
+c.colors.completion.category.border.bottom = xresources["*foreground"]
+c.colors.completion.category.border.top = xresources["*foreground"]
+c.colors.completion.category.bg = xresources["*foreground"]
+c.colors.completion.category.fg = xresources["*color17"]
+c.colors.completion.fg = xresources["*color17"]
+c.colors.completion.even.bg = xresources["*foreground"]
+c.colors.completion.odd.bg = xresources["*foreground"]
+
+#private mode
+c.colors.statusbar.private.bg = xresources["*color18"]
+
+
+# change title format
+c.tabs.title.format = "{audio}{current_title}"
+
+# fontsooo
+c.fonts.web.size.default = 12
+c.fonts.downloads = '9pt ypnenvypn'
+c.fonts.hints = '9pt ypnenvypn'
+c.fonts.statusbar = '9pt ypnenvypn'
+c.fonts.downloads = '9pt ypnenvypn'
+c.fonts.contextmenu = '9pt ypnenvypn'
+c.fonts.tabs.selected = '9pt ypnenvypn-Bold'
+c.fonts.tabs.unselected = '9pt ypnenvypn'
+c.fonts.completion.entry = '9pt ypnenvypn'
+c.fonts.completion.category = '9pt ypnenvypn'
+c.fonts.completion.entry = '9pt ypnenvypn'
+#JetbrainsMono
+
+
+# If not in light theme
+if xresources["*background"] != "#ffffff":
+    # c.qt.args = ['blink-settings=darkMode=4']
+    # c.colors.webpage.prefers_color_scheme_dark = True
+    c.colors.webpage.darkmode.enabled = True
+    c.hints.border = "1px solid #FFFFFF"
+#c.content.user_stylesheets = ['/home/derpalm/.config/qutebrowser/stylesheet.css']
+c.content.user_stylesheets = ['~/.config/qutebrowser/coolsheet.css'] 
+#c.content.user_stylesheets = ['/home/derpalm/.config/qutebrowser/whitelist.user.js']
+
+#:set content.user_stylesheets coolsheet.css
+
+
+#Adblock
+
+c.content.blocking.adblock.lists = [ \
+        "https://easylist.to/easylist/easylist.txt", \
+        "https://easylist.to/easylist/easyprivacy.txt", \
+        "https://secure.fanboy.co.nz/fanboy-cookiemonster.txt", \
+        "https://easylist.to/easylist/fanboy-annoyance.txt", \
+        "https://secure.fanboy.co.nz/fanboy-annoyance.txt", \
+        "https://github.com/uBlockOrigin/uAssets/raw/master/filters/annoyances.txt", \
+        "https://github.com/uBlockOrigin/uAssets/raw/master/filters/filters-2020.txt", \
+        "https://github.com/uBlockOrigin/uAssets/raw/master/filters/filters-2021.txt", \
+        "https://github.com/uBlockOrigin/uAssets/raw/master/filters/filters-2022.txt", \
+        "https://github.com/uBlockOrigin/uAssets/raw/master/filters/unbreak.txt", \
+        "https://github.com/uBlockOrigin/uAssets/raw/master/filters/resource-abuse.txt", \
+        "https://github.com/uBlockOrigin/uAssets/raw/master/filters/privacy.txt", \
+        "https://github.com/uBlockOrigin/uAssets/raw/master/filters/filters.txt" \
+        ]
+
+c.content.blocking.enabled = True
+c.content.blocking.hosts.lists = ['https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts']
+c.content.blocking.method = 'both'
+c.content.autoplay = False
+
+# USERSCRIPTS
+#
+# personally I use
+# - for password managment
+#   - qute-pass
+# - for chrome casting I use
+#   - cast
+#   - I have been looking at using catt instead of castnow
+
+# }}}
