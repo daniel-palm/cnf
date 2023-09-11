@@ -17,7 +17,7 @@ home
 laptop
 
 git pw
-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
+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
 #usual procedure
 cd ~/.config/cnf
 git init
